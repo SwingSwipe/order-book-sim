@@ -73,7 +73,11 @@ class MarketMaker:
         A trade tells us taker_side; if WE were the maker, our side is the
         opposite. Bought -> inventory up, cash down. Sold -> inventory down,
         cash up. Handles partial fills automatically (each fill is its own Trade).
+
+        Returns the list of fills it booked, as dicts {side, price, qty} -- so a
+        caller (Module 5b) can measure the markout of each fill against true value.
         """
+        booked = []
         for trade in self.book.tape[self._tape_seen:]:
             if trade.taker_id in self._my_ids:
                 my_side = trade.taker_side                       # we were aggressor
@@ -90,8 +94,11 @@ class MarketMaker:
                 self.inventory -= trade.quantity
                 self.cash += trade.quantity * trade.price
                 self.n_sells += 1
+            booked.append({"side": my_side, "price": trade.price,
+                           "qty": trade.quantity})
 
         self._tape_seen = len(self.book.tape)
+        return booked
 
     def quote_prices(self, fv):
         """Where to post. Module 4: symmetric around fair value. (Module 5 will
