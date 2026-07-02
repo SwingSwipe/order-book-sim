@@ -20,8 +20,9 @@ a matching engine you have to know exactly how a trade happens.
 4. **Market-maker agent** — post a bid and ask around fair value, capture the
    spread, track inventory and P&L. Teaches how a desk makes money. `market_maker.py`
 5. **Risk & inventory management** — skew quotes by inventory, widen in volatility,
-   survive adverse selection (informed flow). *(in progress)*
-6. **Analytics / visualization** — book depth, P&L curve, inventory over time. *(planned)*
+   survive adverse selection (informed flow). `smart_maker.py`, `informed.py`
+6. **Analytics / visualization** — interactive Streamlit cockpit: book depth, P&L
+   curve, inventory over time, price-vs-true-value, pick-offs. `app.py`
 7. **Experiments** — compare market-making strategies vs an informed trader. *(planned)*
 
 ## Run it
@@ -30,6 +31,12 @@ a matching engine you have to know exactly how a trade happens.
 python order_book.py     # Modules 1-2: book + matching engine demo
 python flow.py           # Module 3: a random market coming to life
 python market_maker.py   # Module 4: the market-maker in a balanced vs one-sided world
+python smart_maker.py    # Module 5a: naive vs risk-aware maker
+python informed.py       # Module 5b: adverse selection, measured
+
+# Module 6 — the interactive cockpit:
+pip install -r requirements.txt
+python -m streamlit run app.py
 ```
 
 ## The one idea to take away
