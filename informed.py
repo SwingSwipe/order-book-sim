@@ -87,6 +87,7 @@ def run_informed_market(book, mm, n_cycles, true_value, flow_params=None,
     n_informed_fills = 0
     pickoffs = []             # worst informed fills, for a "caught in the act" view
     pnl_hist, inv_hist = [], []
+    tv_hist, mid_hist = [], []   # price paths, for plotting in Module 6
 
     mm.requote()
     for _ in range(n_cycles):
@@ -107,6 +108,8 @@ def run_informed_market(book, mm, n_cycles, true_value, flow_params=None,
 
         pnl_hist.append(mm.pnl())
         inv_hist.append(mm.inventory)
+        tv_hist.append(tv)
+        mid_hist.append(book.mid())
         mm.requote()
     mm.reconcile()
 
@@ -123,6 +126,9 @@ def run_informed_market(book, mm, n_cycles, true_value, flow_params=None,
         "worst_pickoffs": pickoffs[:4],
         "pnl_hist": pnl_hist,
         "inv_hist": inv_hist,
+        "tv_hist": tv_hist,
+        "mid_hist": mid_hist,
+        "max_abs_inventory": max((abs(x) for x in inv_hist), default=0),
     }
 
 
@@ -132,6 +138,29 @@ def _fresh_mm():
     mm = SmartMarketMaker(book, half_spread=1, quote_size=5,
                           skew=0.3, max_inventory=40, vol_coef=0.5)
     return book, mm
+
+
+def simulate(n_cycles=500, half_spread=1, quote_size=5, skew=0.3,
+             max_inventory=40, vol_coef=0.5, with_informed=True,
+             p_buy=0.50, informed_size=5, edge=1.0,
+             tv_vol=0.3, jump_prob=0.03, jump_size=4, seed=1):
+    """
+    One-call convenience wrapper for the UI (Module 6): build a fresh book,
+    a SmartMarketMaker, and a TrueValue from plain parameters, run the informed
+    market, and return the results dict (plus the final `book` for a depth
+    snapshot). Keeps the Streamlit app thin -- all logic stays in the engine.
+    """
+    book = OrderBook()
+    seed_book(book, ref_price=100, levels=5, depth=10)
+    mm = SmartMarketMaker(book, half_spread=half_spread, quote_size=quote_size,
+                          skew=skew, max_inventory=max_inventory, vol_coef=vol_coef)
+    tv = TrueValue(start=100, vol=tv_vol, jump_prob=jump_prob, jump_size=jump_size)
+    res = run_informed_market(book, mm, n_cycles, tv,
+                              flow_params=FlowParams(p_buy=p_buy),
+                              informed_size=informed_size, edge=edge,
+                              with_informed=with_informed, seed=seed)
+    res["book"] = book
+    return res
 
 
 # ---------------------------------------------------------------------------
