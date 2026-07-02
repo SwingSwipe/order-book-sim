@@ -27,6 +27,8 @@ a matching engine you have to know exactly how a trade happens.
    curve, inventory over time, price-vs-true-value, pick-offs. `app.py`
 7. **Experiments** — Monte Carlo harness: parameter sweeps + strategy tournament,
    ranked by P&L and risk-adjusted return. `experiments.py`
+8. **Teaching layer** — plain-English concept explanations + an interactive
+   self-quiz (a "Learn" tab in the app). `teach.py`
 
 ## Run it
 
@@ -42,6 +44,7 @@ pip install -r requirements.txt
 python -m streamlit run app.py
 
 python experiments.py    # Module 7: Monte Carlo sweeps + strategy tournament
+python teach.py          # Module 8: concepts + self-quiz in the terminal
 ```
 
 ## The one idea to take away
