@@ -23,7 +23,8 @@ a matching engine you have to know exactly how a trade happens.
    survive adverse selection (informed flow). `smart_maker.py`, `informed.py`
 6. **Analytics / visualization** — interactive Streamlit cockpit: book depth, P&L
    curve, inventory over time, price-vs-true-value, pick-offs. `app.py`
-7. **Experiments** — compare market-making strategies vs an informed trader. *(planned)*
+7. **Experiments** — Monte Carlo harness: parameter sweeps + strategy tournament,
+   ranked by P&L and risk-adjusted return. `experiments.py`
 
 ## Run it
 
@@ -37,6 +38,8 @@ python informed.py       # Module 5b: adverse selection, measured
 # Module 6 — the interactive cockpit:
 pip install -r requirements.txt
 python -m streamlit run app.py
+
+python experiments.py    # Module 7: Monte Carlo sweeps + strategy tournament
 ```
 
 ## The one idea to take away
@@ -45,4 +48,7 @@ python -m streamlit run app.py
 Capturing spread is not profit — the inventory you're forced to hold is the risk
 that decides whether you keep it. That tension is the entire job.
 
-Python 3, standard library only (pandas / Streamlit come in with the analytics module).
+Python 3, standard library only for the engine (Streamlit + matplotlib for the app).
+
+See [METHODOLOGY.md](METHODOLOGY.md) for the full design, models, evaluation
+approach, and an honest account of the simulator's limitations.
