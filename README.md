@@ -1,5 +1,7 @@
 # Order Book + Market-Making Simulator
 
+### ▶ [**Live demo**](https://order-book-sim-mnucrxpeywktqsj59etmc6.streamlit.app/) — be the market-maker in your browser
+
 A from-scratch **limit order book, matching engine, and market-making simulator**
 built to understand how a trading desk actually makes money — market microstructure
 from the ground up. Self-contained: no external data, no API keys.
